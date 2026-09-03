@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Comptes</title>
+<style>
+  :root{
+    --ink:#0E1621; --surface:#16202E; --elevated:#1D2938; --line:#24303F;
+    --ivory:#ECE6D8; --muted:#93A0B2; --faint:#6B7887; --gold:#C6A664; --gold2:#D8BC82;
+    --ok:#86C39B; --danger:#9E5A5A; --danger2:#B06A72;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--ink);color:var(--ivory);font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;}
+  .serif{font-family:Georgia,'Times New Roman',serif;}
+  .gold{color:var(--gold)} .muted{color:var(--muted)} .faint{color:var(--faint)} .ok{color:var(--ok)}
+  .wrap{max-width:960px;margin:0 auto;padding:32px 20px;}
+  header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding-bottom:20px;margin-bottom:24px;border-bottom:1px solid var(--line);}
+  h1.brand{font-family:Georgia,'Times New Roman',serif;font-size:30px;letter-spacing:.02em;color:var(--gold);margin:0;font-weight:600;}
+  .sub{color:var(--muted);font-size:14px;margin-top:6px;display:flex;align-items:center;gap:6px;}
+  .sub svg{width:14px;height:14px;color:var(--gold);}
+  .actions{display:flex;gap:8px;align-items:center;}
+  .btn{display:inline-flex;align-items:center;gap:6px;border-radius:8px;font-size:14px;padding:8px 14px;cursor:pointer;border:1px solid transparent;font-weight:500;font-family:inherit;}
+  .btn svg{width:16px;height:16px}
+  .btn-gold{background:var(--gold);color:#171208;font-weight:600;}
+  .btn-gold:hover{background:var(--gold2);}
+  .btn-gold:disabled{opacity:.5;cursor:default;}
+  .btn-ghost{background:transparent;color:var(--ivory);border-color:var(--line);}
+  .btn-ghost:hover{border-color:rgba(198,166,100,.5);}
+  .btn-danger{background:var(--danger);color:#F3E7E7;}
+  .btn-danger:hover{background:var(--danger2);}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+  .tab{display:inline-flex;align-items:center;gap:8px;border-radius:8px;padding:6px 12px;font-size:14px;font-weight:500;cursor:pointer;background:var(--surface);color:var(--muted);border:1px solid var(--line);transition:all .18s;}
+  .tab:hover{color:var(--ivory);border-color:rgba(198,166,100,.4);}
+  .tab.on{background:var(--gold);color:#171208;border-color:var(--gold);}
+  .tab .dot{width:8px;height:8px;border-radius:99px;}
+  .tab .cnt{font-size:12px;opacity:.7;}
+  .searchbar{position:relative;margin-bottom:16px;}
+  .searchbar>svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--faint);}
+  input,select{background:var(--elevated);color:var(--ivory);border:1px solid var(--line);border-radius:8px;outline:none;font-family:inherit;transition:border-color .15s,box-shadow .15s;}
+  input::placeholder{color:#5F6C7B;}
+  input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(198,166,100,.14);}
+  select option{background:var(--surface);color:var(--ivory);}
+  .searchbar input{width:100%;border-radius:8px;padding:10px 12px 10px 36px;font-size:14px;}
+  .list{display:flex;flex-direction:column;gap:8px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;transition:border-color .18s;}
+  .card:hover{border-color:rgba(198,166,100,.45);}
+  .card:hover .rowactions,.card:hover .ic-copy{opacity:1;}
+  .row{display:flex;align-items:flex-start;gap:14px;}
+  .iconbox{width:36px;height:36px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;}
+  .iconbox svg{width:17px;height:17px;}
+  .body{min-width:0;flex:1;}
+  .titleline{display:flex;align-items:center;gap:8px;}
+  .svc{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .pill{display:inline-flex;align-items:center;gap:4px;border-radius:99px;padding:2px 8px;font-size:12px;font-weight:500;white-space:nowrap;}
+  .pill .dot{width:6px;height:6px;border-radius:99px;}
+  .tlabel{font-size:12px;color:var(--faint);}
+  .login{display:flex;align-items:center;gap:6px;margin-top:6px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:0;font-family:inherit;}
+  .login:hover{color:var(--ivory);}
+  .login svg{width:13px;height:13px;}
+  .ic-copy{opacity:0;transition:opacity .15s;display:inline-flex;}
+  .mono-num{font-variant-numeric:tabular-nums;}
+  .pwline{display:flex;align-items:center;gap:8px;margin-top:4px;}
+  .pw{background:none;border:none;padding:0;cursor:pointer;font-size:13px;}
+  .mono{font-family:ui-monospace,'SF Mono',Menlo,monospace;color:var(--ivory);}
+  .iconbtn{display:grid;place-items:center;background:none;border:none;cursor:pointer;color:var(--faint);border-radius:6px;padding:4px;transition:all .15s;text-decoration:none;}
+  .iconbtn:hover{color:var(--ivory);background:var(--elevated);}
+  .iconbtn svg{width:15px;height:15px;}
+  .iconbtn.del:hover{color:#D08A8A;background:rgba(176,106,114,.14);}
+  .rowactions{display:flex;align-items:center;gap:2px;flex-shrink:0;opacity:0;transition:opacity .15s;}
+  .note{font-size:12px;margin:6px 0 0;color:var(--faint);}
+  .empty{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:48px;text-align:center;color:var(--muted);font-size:14px;}
+  .empty a{color:var(--gold);cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
+  .overlay{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(6,10,16,.64);}
+  .modal{background:var(--surface);border:1px solid var(--line);border-radius:12px;width:100%;max-width:440px;}
+  .modal.sm{max-width:380px;padding:20px;}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line);}
+  .modal-head h3{margin:0;font-size:18px;color:var(--ivory);font-family:Georgia,serif;}
+  .modal-body{padding:20px;display:flex;flex-direction:column;gap:12px;}
+  .modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid var(--line);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .f label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:4px;}
+  .f input,.f select{width:100%;padding:8px 12px;font-size:14px;}
+  .gate{min-height:100vh;display:grid;place-items:center;padding:16px;}
+  .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px;width:100%;max-width:380px;}
+  .gate-icon{width:48px;height:48px;border-radius:99px;display:grid;place-items:center;border:1px solid var(--gold);color:var(--gold);margin-bottom:16px;}
+  .gate-icon svg{width:20px;height:20px;}
+  .gate h1{font-size:20px;color:var(--ivory);margin:0;font-family:Georgia,serif;}
+  .gate p{color:var(--muted);font-size:14px;line-height:1.5;margin:6px 0 0;}
+  .gate .stack{margin-top:24px;display:flex;flex-direction:column;gap:12px;}
+  .gate input{padding:10px 12px;font-size:14px;width:100%;}
+  .err{color:#D08A8A;font-size:13px;margin:0;}
+  .linklike{background:none;border:none;color:var(--gold);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:2px;padding:4px 0 0;font-family:inherit;text-align:center;}
+  .linklike:hover{color:var(--gold2);}
+  @media(max-width:560px){ header{flex-direction:column;align-items:flex-start;} .grid2{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+
+// ————— Référentiels —————
+var ENTITIES = {
+  fundus: { label:"Holding FUNDUS", short:"FUNDUS", color:"#7C9BC4" },
+  macon:  { label:"EURL Mâcon",     short:"Mâcon",  color:"#77A98C" },
+  soloc:  { label:"SOLOC'",         short:"SOLOC'", color:"#A48FC2" },
+  perso:  { label:"Perso",          short:"Perso",  color:"#C7A079" },
+};
+var ENTITY_ORDER = ["fundus","macon","soloc","perso"];
+var TYPES = {
+  mail:   { label:"Mail",   icon:"mail" },
+  banque: { label:"Banque", icon:"bank" },
+  compta: { label:"Compta", icon:"calc" },
+  impots: { label:"Impôts", icon:"file" },
+  urssaf: { label:"URSSAF", icon:"building" },
+  autre:  { label:"Autre",  icon:"key" },
+};
+var TYPE_ORDER = ["mail","banque","compta","impots","urssaf","autre"];
+var SEED = [
+  {id:"1",entity:"fundus",type:"mail",service:"Google Workspace",login:"contact@fundus.fr",password:"exemple-mdp",url:"https://mail.google.com",note:""},
+  {id:"2",entity:"fundus",type:"banque",service:"Qonto",login:"charles@fundus.fr",password:"exemple-mdp",url:"https://app.qonto.com",note:"Compte pro holding"},
+  {id:"4",entity:"macon",type:"mail",service:"Google Workspace",login:"contact@purple-macon.fr",password:"exemple-mdp",url:"https://mail.google.com",note:""},
+  {id:"6",entity:"macon",type:"impots",service:"impots.gouv.fr",login:"SIREN 9XX XXX XXX",password:"exemple-mdp",url:"https://www.impots.gouv.fr",note:"Espace pro"},
+  {id:"7",entity:"macon",type:"urssaf",service:"urssaf.fr",login:"charles@purple-macon.fr",password:"exemple-mdp",url:"https://www.urssaf.fr",note:""},
+  {id:"8",entity:"soloc",type:"mail",service:"Google Workspace",login:"hello@solocimmo.fr",password:"exemple-mdp",url:"https://mail.google.com",note:""},
+  {id:"10",entity:"perso",type:"banque",service:"Boursorama",login:"charles.bl@gmail.com",password:"exemple-mdp",url:"https://clients.boursobank.com",note:""},
+];
+var STORE_KEY = "comptes:vault:v1";
+
+// ————— Icônes (SVG inline) —————
+var PATHS = {
+  mail:'<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+  bank:'<line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/>',
+  calc:'<rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M8 10h.01"/><path d="M12 10h.01"/><path d="M8 14h.01"/><path d="M12 14h.01"/>',
+  file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/>',
+  building:'<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/>',
+  key:'<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/>',
+  eye:'<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+  eyeOff:'<path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/>',
+  copy:'<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+  check:'<polyline points="20 6 9 17 4 12"/>',
+  externalLink:'<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+  plus:'<line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/>',
+  download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
+  search:'<circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/>',
+  pencil:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+  x:'<line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/>',
+  lock:'<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1Z"/><path d="m9 12 2 2 4-4"/>',
+};
+function ic(name){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(PATHS[name]||"")+'</svg>'; }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+
+// ————— Chiffrement —————
+var encoder = new TextEncoder(), decoder = new TextDecoder();
+function b64(buf){ var b=new Uint8Array(buf),s="";for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s); }
+function unb64(str){ return Uint8Array.from(atob(str),function(c){return c.charCodeAt(0);}); }
+function deriveKey(pw,salt){
+  return crypto.subtle.importKey("raw",encoder.encode(pw),"PBKDF2",false,["deriveKey"]).then(function(base){
+    return crypto.subtle.deriveKey({name:"PBKDF2",salt:salt,iterations:200000,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+  });
+}
+function encryptJSON(key,obj){
+  var iv=crypto.getRandomValues(new Uint8Array(12));
+  return crypto.subtle.encrypt({name:"AES-GCM",iv:iv},key,encoder.encode(JSON.stringify(obj))).then(function(ct){return{iv:b64(iv),ct:b64(ct)};});
+}
+function decryptJSON(key,iv,ct){
+  return crypto.subtle.decrypt({name:"AES-GCM",iv:unb64(iv)},key,unb64(ct)).then(function(pt){return JSON.parse(decoder.decode(pt));});
+}
+
+// ————— État —————
+var masterKey=null, saltB64="", accounts=[], stored=null;
+var tab="all", query="", revealed={}, copied="";
+var root=document.getElementById("app");
+var cryptoOK = !!(window.crypto && crypto.subtle && crypto.subtle.deriveKey);
+
+// ————— Persistance —————
+function persist(next){
+  accounts=next;
+  if(!masterKey) return;
+  encryptJSON(masterKey,next).then(function(e){
+    localStorage.setItem(STORE_KEY,JSON.stringify({salt:saltB64,iv:e.iv,ct:e.ct}));
+  });
+}
+
+// ————— Écrans coffre —————
+function renderGate(mode){
+  var setup = mode==="setup";
+  root.innerHTML =
+    '<div class="gate"><div class="gate-card">'+
+      '<div class="gate-icon">'+ic("lock")+'</div>'+
+      '<h1>'+(setup?"Créez votre mot de passe maître":"Coffre verrouillé")+'</h1>'+
+      '<p>'+(setup?"Il chiffre tout le contenu du coffre. Impossible à récupérer si vous l\'oubliez — conservez-le en lieu sûr.":"Entrez votre mot de passe maître pour déverrouiller.")+'</p>'+
+      '<div class="stack">'+
+        '<input id="pw" type="password" placeholder="Mot de passe maître" autofocus />'+
+        (setup?'<input id="pw2" type="password" placeholder="Confirmez le mot de passe" />':'')+
+        '<p class="err" id="err" style="display:none"></p>'+
+        '<button class="btn btn-gold" id="go" style="justify-content:center">'+(setup?"Créer le coffre":"Déverrouiller")+'</button>'+
+        '<button class="linklike" id="importLink" type="button">Importer une sauvegarde (.vault)…</button>'+
+      '</div>'+
+    '</div></div>';
+
+  var pw=document.getElementById("pw"), pw2=document.getElementById("pw2"), go=document.getElementById("go"), err=document.getElementById("err");
+  function showErr(m){ err.textContent=m; err.style.display="block"; }
+  function submit(){
+    err.style.display="none";
+    if(!cryptoOK) return showErr("Chiffrement indisponible : ouvrez la page en https ou via localhost.");
+    if(pw.value.length<8) return showErr("8 caractères minimum.");
+    if(setup && pw.value!==pw2.value) return showErr("Les deux saisies diffèrent.");
+    go.disabled=true; go.textContent="…";
+    if(setup){
+      var salt=crypto.getRandomValues(new Uint8Array(16));
+      deriveKey(pw.value,salt).then(function(key){
+        return encryptJSON(key,SEED).then(function(e){
+          saltB64=b64(salt); masterKey=key; accounts=SEED.slice();
+          localStorage.setItem(STORE_KEY,JSON.stringify({salt:saltB64,iv:e.iv,ct:e.ct}));
+          mountApp();
+        });
+      }).catch(function(){ go.disabled=false; go.textContent="Créer le coffre"; showErr("Erreur au chiffrement."); });
+    } else {
+      deriveKey(pw.value,unb64(stored.salt)).then(function(key){
+        return decryptJSON(key,stored.iv,stored.ct).then(function(data){
+          masterKey=key; saltB64=stored.salt; accounts=data; mountApp();
+        });
+      }).catch(function(){ go.disabled=false; go.textContent="Déverrouiller"; showErr("Mot de passe incorrect."); });
+    }
+  }
+  go.onclick=submit;
+  document.getElementById("importLink").onclick=function(){
+    var inp=document.createElement("input"); inp.type="file"; inp.accept=".vault,.json,application/json";
+    inp.onchange=function(){
+      var file=inp.files[0]; if(!file) return;
+      var reader=new FileReader();
+      reader.onload=function(){
+        try{
+          var data=JSON.parse(reader.result);
+          if(!data.salt||!data.iv||!data.ct) throw new Error("format");
+          if(localStorage.getItem(STORE_KEY) && !confirm("Remplacer le coffre déjà présent dans ce navigateur ?")) return;
+          localStorage.setItem(STORE_KEY,JSON.stringify({salt:data.salt,iv:data.iv,ct:data.ct}));
+          stored=data; renderGate("unlock");
+        }catch(e){ showErr("Fichier de sauvegarde invalide."); }
+      };
+      reader.readAsText(file);
+    };
+    inp.click();
+  };
+  [pw,pw2].forEach(function(el){ if(el) el.addEventListener("keydown",function(e){ if(e.key==="Enter") submit(); }); });
+  pw.focus();
+}
+
+// ————— App —————
+function mountApp(){
+  root.innerHTML =
+    '<div class="wrap">'+
+      '<header>'+
+        '<div>'+
+          '<h1 class="brand">Comptes</h1>'+
+          '<div class="sub">'+ic("shield")+' Coffre chiffré · déverrouillé</div>'+
+        '</div>'+
+        '<div class="actions">'+
+          '<button class="btn btn-ghost" id="exportBtn">'+ic("download")+' Exporter</button>'+
+          '<button class="btn btn-ghost" id="lockBtn">'+ic("lock")+' Verrouiller</button>'+
+          '<button class="btn btn-gold" id="addBtn">'+ic("plus")+' Ajouter</button>'+
+        '</div>'+
+      '</header>'+
+      '<div class="tabs" id="tabs"></div>'+
+      '<div class="searchbar">'+ic("search")+'<input id="q" placeholder="Rechercher un service, un email, une note…" /></div>'+
+      '<div class="list" id="list"></div>'+
+    '</div>';
+
+  document.getElementById("lockBtn").onclick=function(){ masterKey=null; accounts=[]; revealed={}; query=""; renderGate("unlock"); };
+  document.getElementById("addBtn").onclick=function(){ openModal(null); };
+  document.getElementById("exportBtn").onclick=exportVault;
+  var qEl=document.getElementById("q");
+  qEl.value=query;
+  qEl.addEventListener("input",function(){ query=qEl.value; renderList(); });
+  document.getElementById("tabs").addEventListener("click",function(e){
+    var b=e.target.closest("[data-tab]"); if(!b) return;
+    tab=b.getAttribute("data-tab"); renderTabs(); renderList();
+  });
+  document.getElementById("list").addEventListener("click",onListClick);
+  renderTabs(); renderList();
+}
+
+function counts(){ var c={all:accounts.length}; ENTITY_ORDER.forEach(function(e){ c[e]=accounts.filter(function(a){return a.entity===e;}).length; }); return c; }
+
+function renderTabs(){
+  var c=counts();
+  var html='<button class="tab '+(tab==="all"?"on":"")+'" data-tab="all"><span class="dot" style="background:'+(tab==="all"?"#171208":"#93A0B2")+'"></span>Tout<span class="cnt">'+c.all+'</span></button>';
+  ENTITY_ORDER.forEach(function(e){
+    var on=tab===e;
+    html+='<button class="tab '+(on?"on":"")+'" data-tab="'+e+'"><span class="dot" style="background:'+(on?"#171208":ENTITIES[e].color)+'"></span>'+ENTITIES[e].short+'<span class="cnt">'+c[e]+'</span></button>';
+  });
+  document.getElementById("tabs").innerHTML=html;
+}
+
+function visibleAccounts(){
+  var q=query.trim().toLowerCase();
+  return accounts.filter(function(a){ return tab==="all"||a.entity===tab; })
+    .filter(function(a){
+      if(!q) return true;
+      return [a.service,a.login,a.note,TYPES[a.type].label,ENTITIES[a.entity].label].join(" ").toLowerCase().indexOf(q)>-1;
+    })
+    .sort(function(a,b){ return (TYPE_ORDER.indexOf(a.type)-TYPE_ORDER.indexOf(b.type))||a.service.localeCompare(b.service); });
+}
+
+function renderList(){
+  var list=visibleAccounts(), el=document.getElementById("list");
+  if(!list.length){
+    el.innerHTML='<div class="empty">Aucun compte ici. <a data-act="addhere">Ajoutez le premier.</a></div>';
+    return;
+  }
+  el.innerHTML=list.map(cardHTML).join("");
+}
+
+function cardHTML(a){
+  var ent=ENTITIES[a.entity], t=TYPES[a.type], show=revealed[a.id];
+  var loginHTML=a.login?(
+    '<button class="login" data-act="copylogin" data-id="'+a.id+'">'+
+      '<span class="mono-num">'+esc(a.login)+'</span>'+
+      (copied===a.id+"-login"?'<span class="ok">'+ic("check")+'</span>':'<span class="ic-copy">'+ic("copy")+'</span>')+
+    '</button>'):'';
+  var pwHTML=a.password?(
+    '<div class="pwline">'+
+      '<button class="pw mono" data-act="reveal" data-id="'+a.id+'" title="Cliquer pour afficher">'+(show?esc(a.password):"••••••••••")+'</button>'+
+      '<button class="iconbtn" data-act="reveal" data-id="'+a.id+'">'+ic(show?"eyeOff":"eye")+'</button>'+
+      '<button class="iconbtn" data-act="copypw" data-id="'+a.id+'">'+(copied===a.id+"-pw"?'<span class="ok" style="display:grid;place-items:center">'+ic("check")+'</span>':ic("copy"))+'</button>'+
+    '</div>'):'';
+  return '<div class="card">'+
+    '<div class="row">'+
+      '<div class="iconbox" style="background:'+ent.color+'22;color:'+ent.color+'">'+ic(t.icon)+'</div>'+
+      '<div class="body">'+
+        '<div class="titleline">'+
+          '<span class="svc">'+esc(a.service)+'</span>'+
+          '<span class="pill" style="background:'+ent.color+'1F;color:'+ent.color+'"><span class="dot" style="background:'+ent.color+'"></span>'+ent.short+'</span>'+
+          '<span class="tlabel">'+t.label+'</span>'+
+        '</div>'+
+        loginHTML+pwHTML+
+        (a.note?'<p class="note">'+esc(a.note)+'</p>':'')+
+      '</div>'+
+      '<div class="rowactions">'+
+        (a.url?'<a class="iconbtn" href="'+esc(a.url)+'" target="_blank" rel="noreferrer" title="Ouvrir">'+ic("externalLink")+'</a>':'')+
+        '<button class="iconbtn" data-act="edit" data-id="'+a.id+'" title="Modifier">'+ic("pencil")+'</button>'+
+        '<button class="iconbtn del" data-act="del" data-id="'+a.id+'" title="Supprimer">'+ic("trash")+'</button>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function onListClick(e){
+  var t=e.target.closest("[data-act]"); if(!t) return;
+  var act=t.getAttribute("data-act"), id=t.getAttribute("data-id");
+  var a=accounts.find(function(x){return x.id===id;});
+  if(act==="addhere"){ openModal(null); return; }
+  if(act==="reveal"){ revealed[id]=!revealed[id]; renderList(); return; }
+  if(act==="copylogin"){ doCopy(a.login,id+"-login"); return; }
+  if(act==="copypw"){ doCopy(a.password,id+"-pw"); return; }
+  if(act==="edit"){ openModal(a); return; }
+  if(act==="del"){ confirmDelete(a); return; }
+}
+
+function doCopy(text,tag){
+  if(navigator.clipboard) navigator.clipboard.writeText(text);
+  copied=tag; renderList();
+  setTimeout(function(){ copied=""; renderList(); },1200);
+}
+
+// ————— Modales —————
+function overlay(inner){
+  var o=document.createElement("div");
+  o.className="overlay";
+  o.innerHTML=inner;
+  o.addEventListener("click",function(e){ if(e.target===o) document.body.removeChild(o); });
+  document.body.appendChild(o);
+  return o;
+}
+
+function confirmDelete(a){
+  var o=overlay(
+    '<div class="modal sm">'+
+      '<h3 class="serif" style="margin:0 0 4px;font-size:18px">Supprimer ce compte ?</h3>'+
+      '<p class="muted" style="font-size:14px;margin:0">'+esc(a.service)+' — '+ENTITIES[a.entity].label+'</p>'+
+      '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">'+
+        '<button class="btn btn-ghost" data-x>Annuler</button>'+
+        '<button class="btn btn-danger" data-ok>Supprimer</button>'+
+      '</div>'+
+    '</div>');
+  o.querySelector("[data-x]").onclick=function(){ document.body.removeChild(o); };
+  o.querySelector("[data-ok]").onclick=function(){ persist(accounts.filter(function(x){return x.id!==a.id;})); document.body.removeChild(o); renderTabs(); renderList(); };
+}
+
+function openModal(a){
+  var isNew=!a;
+  var f=a||{entity:(tab==="all"?"fundus":tab),type:"mail",service:"",login:"",password:"",url:"",note:""};
+  var entOpts=ENTITY_ORDER.map(function(e){return '<option value="'+e+'"'+(f.entity===e?" selected":"")+'>'+ENTITIES[e].label+'</option>';}).join("");
+  var typeOpts=TYPE_ORDER.map(function(tp){return '<option value="'+tp+'"'+(f.type===tp?" selected":"")+'>'+TYPES[tp].label+'</option>';}).join("");
+  function field(id,label,val,ph){ return '<div class="f"><label>'+label+'</label><input id="'+id+'" value="'+esc(val)+'" placeholder="'+ph+'" /></div>'; }
+  var o=overlay(
+    '<div class="modal">'+
+      '<div class="modal-head"><h3>'+(isNew?"Nouveau compte":"Modifier le compte")+'</h3><button class="iconbtn" data-x>'+ic("x")+'</button></div>'+
+      '<div class="modal-body">'+
+        '<div class="grid2">'+
+          '<div class="f"><label>Entité</label><select id="m-entity">'+entOpts+'</select></div>'+
+          '<div class="f"><label>Type</label><select id="m-type">'+typeOpts+'</select></div>'+
+        '</div>'+
+        field("m-service","Service",f.service,"Qonto, Pennylane, urssaf.fr…")+
+        field("m-login","Identifiant / email",f.login,"charles@…")+
+        field("m-password","Mot de passe",f.password,"Chiffré à l'enregistrement")+
+        field("m-url","URL",f.url,"https://…")+
+        field("m-note","Note",f.note,"Optionnel")+
+      '</div>'+
+      '<div class="modal-foot"><button class="btn btn-ghost" data-x>Annuler</button><button class="btn btn-gold" data-save>Enregistrer</button></div>'+
+    '</div>');
+  o.querySelectorAll("[data-x]").forEach(function(b){ b.onclick=function(){ document.body.removeChild(o); }; });
+  o.querySelector("[data-save]").onclick=function(){
+    var g=function(id){return document.getElementById(id).value;};
+    var service=g("m-service").trim(); if(!service) return;
+    var rec={ id:isNew?String(Date.now()):a.id, entity:g("m-entity"), type:g("m-type"), service:service, login:g("m-login"), password:g("m-password"), url:g("m-url"), note:g("m-note") };
+    var next=isNew?accounts.concat([rec]):accounts.map(function(x){return x.id===a.id?rec:x;});
+    persist(next); document.body.removeChild(o); renderTabs(); renderList();
+  };
+  document.getElementById("m-service").focus();
+}
+
+// ————— Sauvegarde —————
+function exportVault(){
+  var raw=localStorage.getItem(STORE_KEY); if(!raw) return;
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([raw],{type:"application/json"}));
+  a.download="comptes-vault-"+new Date().toISOString().slice(0,10)+".vault";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href);
+}
+
+// ————— Init —————
+(function init(){
+  var raw=localStorage.getItem(STORE_KEY);
+  if(raw){ try{ stored=JSON.parse(raw); renderGate("unlock"); return; }catch(e){} }
+  renderGate("setup");
+})();
+</script>
+</body>
+</html>

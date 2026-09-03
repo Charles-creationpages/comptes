@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Espace Charles Bouchon-Lyonnet</title>
+<style>
+  :root{
+    --ink:#0E1621; --surface:#16202E; --elevated:#1D2938; --line:#24303F;
+    --ivory:#ECE6D8; --muted:#93A0B2; --faint:#6B7887; --gold:#C6A664; --gold2:#D8BC82;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--ink);color:var(--ivory);font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;}
+  .wrap{max-width:920px;margin:0 auto;padding:72px 20px 48px;}
+  .head{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:36px;}
+  .eyebrow{color:var(--gold);font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 10px;}
+  h1{font-family:Georgia,'Times New Roman',serif;font-size:40px;line-height:1.1;letter-spacing:.01em;margin:0;color:var(--ivory);}
+  h1 .accent{color:var(--gold);}
+  .lead{color:var(--muted);font-size:15px;margin:14px 0 0;max-width:60ch;line-height:1.55;}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .tool{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;transition:border-color .2s, transform .2s;}
+  .tool:hover{border-color:rgba(198,166,100,.5);transform:translateY(-2px);}
+  .tool-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--muted);}
+  .badge .dot{width:8px;height:8px;border-radius:99px;}
+  .arrow{color:var(--faint);transition:color .2s, transform .2s;}
+  .tool:hover .arrow{color:var(--gold);transform:translate(2px,-2px);}
+  .arrow svg{width:18px;height:18px;}
+  .icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;margin-bottom:16px;}
+  .icon svg{width:20px;height:20px;}
+  .tool h2{font-family:Georgia,serif;font-size:20px;margin:0 0 6px;color:var(--ivory);}
+  .tool p{color:var(--muted);font-size:13.5px;line-height:1.5;margin:0;}
+  .soon{opacity:.55;cursor:default;pointer-events:none;}
+  .soon .arrow{display:none;}
+  .soon .badge{color:var(--faint);}
+  footer{margin-top:44px;padding-top:24px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;line-height:1.6;}
+  footer .gold{color:var(--gold);}
+  @media(max-width:640px){ .wrap{padding:48px 16px 40px;} h1{font-size:32px;} .grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">Espace de travail</p>
+      <h1>Charles <span class="accent">Bouchon-Lyonnet</span></h1>
+      <p class="lead">Accès centralisé aux outils. Chaque application s'ouvre dans son propre espace ; les données sensibles restent chiffrées côté client.</p>
+    </div>
+
+    <div class="grid">
+
+      <a class="tool" href="https://REMPLACER-crm-soloc" target="_blank" rel="noreferrer">
+        <div class="tool-top">
+          <div class="badge"><span class="dot" style="background:#A48FC2"></span>SOLOC'</div>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+        </div>
+        <div class="icon" style="background:#A48FC222;color:#A48FC2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h2>CRM SOLOC'</h2>
+        <p>Suivi des leads, chasse d'appartements et pipeline de la chasse locative lyonnaise.</p>
+      </a>
+
+      <a class="tool" href="https://REMPLACER-crm-purple" target="_blank" rel="noreferrer">
+        <div class="tool-top">
+          <div class="badge"><span class="dot" style="background:#77A98C"></span>Purple</div>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+        </div>
+        <div class="icon" style="background:#77A98C22;color:#77A98C"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01"/><path d="M9 12v.01"/><path d="M9 15v.01"/><path d="M9 18v.01"/></svg></div>
+        <h2>CRM Purple</h2>
+        <p>Gestion des dossiers d'investissement locatif et du conseil client.</p>
+      </a>
+
+      <a class="tool" href="comptes.html">
+        <div class="tool-top">
+          <div class="badge"><span class="dot" style="background:#C6A664"></span>Coffre chiffré</div>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+        </div>
+        <div class="icon" style="background:#C6A66422;color:#C6A664"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <h2>Comptes</h2>
+        <p>Annuaire de tes accès (holding, EURL, SOLOC', perso), protégé par un mot de passe maître.</p>
+      </a>
+
+      <div class="tool soon">
+        <div class="tool-top">
+          <div class="badge"><span class="dot" style="background:#7C9BC4"></span>À venir</div>
+        </div>
+        <div class="icon" style="background:#7C9BC422;color:#7C9BC4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg></div>
+        <h2>Nouvel outil</h2>
+        <p>Emplacement réservé pour la prochaine application à brancher ici.</p>
+      </div>
+
+    </div>
+
+    <footer>
+      Espace privé. Remplace les liens <span class="gold">REMPLACER-…</span> par les URL réelles de tes CRM.<br>
+      Le coffre « Comptes » chiffre ses données dans ton navigateur — pense à l'exporter régulièrement pour ne rien perdre.
+    </footer>
+  </div>
+</body>
+</html>
